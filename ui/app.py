@@ -128,17 +128,28 @@ with st.form("input_form"):
 
 if submitted:
     X = pd.DataFrame([{
-        "age": age, "sex": sex, "cp": cp, "trestbps": trestbps, "chol": chol,
-        "fbs": fbs, "restecg": restecg, "thalach": thalach, "exang": exang,
-        "oldpeak": oldpeak, "slope": slope, "ca": ca, "thal": thal
+        "Age (العمر)": age,
+        "Sex (الجنس: 1=ذكر, 0=أنثى)": sex,
+        "Chest Pain Type (نوع ألم الصدر)": cp,
+        "Resting Blood Pressure - trestbps (ضغط الدم أثناء الراحة)": trestbps,
+        "Serum Cholesterol - chol (الكوليسترول)": chol,
+        "Fasting Blood Sugar - fbs (سكر صائم > 120)": fbs,
+        "Resting ECG - restecg (رسم القلب)": restecg,
+        "Max Heart Rate - thalach (أقصى معدل ضربات)": thalach,
+        "Exercise Induced Angina - exang (ذبحة صدرية بالمجهود)": exang,
+        "ST Depression - oldpeak (انخفاض مقطع ST)": oldpeak,
+        "Slope of ST Segment - slope (ميل المقطع ST)": slope,
+        "Major Vessels - ca (عدد الأوعية الرئيسية)": ca,
+        "Thalassemia - thal (ثلاسيميا)": thal
     }])
     pred = pipe.predict(X)[0]
     try:
         proba = pipe.predict_proba(X)[0,1]
     except Exception:
         proba = None
+
     st.subheader("Result")
     st.write("**Prediction:**", "Heart disease **likely**" if pred==1 else "Heart disease **unlikely**")
     if proba is not None:
         st.write(f"**Probability:** {proba:.2%}")
-    st.caption("Educational use only — not medical advice.")
+    st.caption("Educational use only — ليس تشخيص طبي")
