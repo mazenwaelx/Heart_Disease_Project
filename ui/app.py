@@ -1,153 +1,114 @@
-Comprehensive Machine Learning Full Pipeline
-on Heart Disease UCI Dataset
-1. General Description of the Task:
-This project aims to analyze, predict, and visualize heart disease risks using machine
-learning. The workflow involves data preprocessing, feature selection, dimensionality
-reduction (PCA), model training, evaluation, and deployment. Classification models like
-Logistic Regression, Decision Trees, Random Forest, and SVM will be used, alongside
-K-Means and Hierarchical Clustering for unsupervised learning. Additionally, a Streamlit UI
-will be built for user interaction, deployed via Ngrok, and the project will be hosted on GitHub.
-1.1 Objectives:
-● Perform Data Preprocessing & Cleaning (handle missing values, encoding, scaling).
-● Apply Dimensionality Reduction (PCA) to retain essential features.
-● Implement Feature Selection using statistical methods and ML-based techniques.
-● Train Supervised Learning Models (Logistic Regression, Decision Trees, Random
-Forest, SVM) for classification.
-● Apply Unsupervised Learning (K-Means, Hierarchical Clustering) for pattern discovery.
-● Optimize Models using Hyperparameter Tuning (GridSearchCV,
-RandomizedSearchCV).
-● Deploy a Streamlit UI for real-time user interaction. [Bonus]
-● Host the application using Ngrok [Bonus] and upload the project to GitHub for
-accessibility.
-1.2 Tools to be Used:
-● Programming Languages: Python
-● Libraries: Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn, TensorFlow/Keras
-(optional)
-● Dimensionality Reduction & Feature Selection: PCA, RFE, Chi-Square Test
-● Supervised Models: Logistic Regression, Decision Trees, Random Forest, SVM
-● Unsupervised Models: K-Means, Hierarchical Clustering
-● Model Optimization: GridSearchCV, RandomizedSearchCV
-● Deployment Tools: Streamlit [Bonus], Ngrok [Bonus], GitHub
-2. Requirements & Steps
-2.1 Data Preprocessing & Cleaning
-Steps:
-1. Load the Heart Disease UCI dataset into a Pandas DataFrame.
-2. Handle missing values (imputation or removal).
-3. Perform data encoding (one-hot encoding for categorical variables).
-4. Standardize numerical features using MinMaxScaler or StandardScaler.
-5. Conduct Exploratory Data Analysis (EDA) with histograms, correlation heatmaps,
-and boxplots.
-Deliverable:
-✔️ Cleaned dataset ready for modeling
-2.2 Dimensionality Reduction - PCA (Principal Component Analysis)
-Steps:
-1. Apply PCA to reduce feature dimensionality while maintaining variance.
-2. Determine the optimal number of principal components using the explained variance
-ratio.
-3. Visualize PCA results using a scatter plot and cumulative variance plot.
-Deliverable:
-✔️ PCA-transformed dataset
-✔️ Graph showing variance retained per component
-2.3 Feature Selection
-Steps:
-1. Use Feature Importance (Random Forest / XGBoost feature importance scores) to
-rank variables.
-2. Apply Recursive Feature Elimination (RFE) to select the best predictors.
-3. Use Chi-Square Test to check feature significance.
-4. Select only the most relevant features for modeling.
-Deliverable:
-✔️ Reduced dataset with selected key features
-✔️ Feature importance ranking visualization
-2.4 Supervised Learning - Classification Models
-Steps:
-1. Split the dataset into training (80%) and testing (20%) sets.
-2. Train the following models:
-○ Logistic Regression
-○ Decision Tree
-○ Random Forest
-○ Support Vector Machine (SVM)
-3. Evaluate models using:
-○ Accuracy, Precision, Recall, F1-score
-○ ROC Curve & AUC Score
-Deliverable:
-✔️ Trained models with performance metrics
-2.5 Unsupervised Learning - Clustering
-Steps:
-1. Apply K-Means Clustering (elbow method to determine K).
-2. Perform Hierarchical Clustering (dendrogram analysis).
-3. Compare clusters with actual disease labels.
-Deliverable:
-✔️ Clustering models with visualized results
-2.6 Hyperparameter Tuning
-Steps:
-1. Use GridSearchCV & RandomizedSearchCV to optimize model hyperparameters.
-2. Compare optimized models with baseline performance.
-Deliverable:
-✔️ Best performing model with optimized hyperparameters
-2.7 Model Export & Deployment
-Steps:
-1. Save the trained model using joblib or pickle (.pkl format).
-2. Ensure reproducibility by saving model pipeline (preprocessing + model).
-Deliverable:
-✔️ Model exported as .pkl file
-2.8 Streamlit Web UI Development [Bonus]
-Steps:
-1. Create a Streamlit UI to allow users to input health data.
-2. Provide real-time prediction output based on user inputs.
-3. Add data visualization for users to explore heart disease trends.
-Deliverable:
-✔️ Functional Streamlit UI for user interaction
-2.9 Deployment using Ngrok [Bonus]
-Steps:
-1. Deploy the Streamlit app locally.
-2. Use Ngrok to create a public access link.
-3. Share the Ngrok link for live access to the web application.
-Deliverable:
-✔️ Publicly accessible Streamlit app via Ngrok link
-2.10 Upload the Project to GitHub
-Steps:
-1. Create a GitHub repository for the project.
-2. Push the following files:
-○ Data preprocessing scripts
-○ Trained models in .pkl format
-○ Notebook files for each step
-○ Streamlit UI source code
-○ README file with instructions
-3. Add requirements.txt for easy environment setup.
-4. Include deployment steps for Ngrok in documentation.
-Deliverable:
-✔️ GitHub repository with all project files and documentation
-3. Final Deliverables
-✔️ Cleaned dataset with selected features
-✔️ Dimensionality reduction (PCA) results
-✔️ Trained supervised and unsupervised models
-✔️ Performance evaluation metrics
-✔️ Hyperparameter optimized model
-✔️ Saved model in .pkl format
-✔️ GitHub repository with all source code
-✔️ Streamlit UI for real-time predictions [Bonus]
-✔️ Ngrok link to access the live app [Bonus]
-4. File Structure
-Heart_Disease_Project/
-│── data/
-│ ├── heart_disease.csv
-│── notebooks/
-│ ├── 01_data_preprocessing.ipynb
-│ ├── 02_pca_analysis.ipynb
-│ ├── 03_feature_selection.ipynb
-│ ├── 04_supervised_learning.ipynb
-│ ├── 05_unsupervised_learning.ipynb
-│ ├── 06_hyperparameter_tuning.ipynb
-│── models/
-│ ├── final_model.pkl
-│── ui/
-│ ├── app.py (Streamlit UI)
-│── deployment/
-│ ├── ngrok_setup.txt
-│── results/
-│ ├── evaluation_metrics.txt
-│── README.md
-│── requirements.txt
-│── .gitignore
-5. Dataset Link
-📌 Heart Disease UCI Dataset
+
+import json
+from pathlib import Path
+import subprocess, sys
+
+import joblib
+import pandas as pd
+import streamlit as st
+
+st.set_page_config(page_title="Heart Disease (UCI) — Predictor", page_icon="❤️", layout="centered")
+st.title("❤️ Heart Disease (UCI) — Predictor")
+
+BASE = Path(__file__).resolve().parents[1]
+MODEL_PATH = BASE / "models" / "final_model.pkl"
+DATA_PATH = BASE / "data" / "heart_disease.csv"
+
+def ensure_data():
+    if DATA_PATH.exists() and DATA_PATH.stat().st_size > 0:
+        return
+    try:
+        from ucimlrepo import fetch_ucirepo
+        heart = fetch_ucirepo(id=45)
+        X = heart.data.features.copy()
+        y = heart.data.targets.copy()
+        y = (y.iloc[:,0] > 0).astype(int).rename("target")
+        df = pd.concat([X, y], axis=1)
+        df.to_csv(DATA_PATH, index=False)
+    except Exception as e:
+        st.error(f"Could not fetch dataset automatically: {e}")
+
+def train_and_save():
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler, OneHotEncoder
+    from sklearn.compose import ColumnTransformer
+    from sklearn.pipeline import Pipeline
+    from sklearn.impute import SimpleImputer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, roc_auc_score
+
+    ensure_data()
+    df = pd.read_csv(DATA_PATH)
+    if "target" not in df.columns and "num" in df.columns:
+        df["target"] = (df["num"] > 0).astype(int)
+        df.drop(columns=["num"], inplace=True)
+
+    y = df["target"].astype(int)
+    X = df.drop(columns=["target"])
+
+    num = X.select_dtypes(include=[float,int]).columns.tolist()
+    cat = [c for c in X.columns if c not in num]
+
+    pre = ColumnTransformer([
+        ("num", Pipeline([("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler())]), num),
+        ("cat", Pipeline([("imputer", SimpleImputer(strategy="most_frequent")), ("ohe", OneHotEncoder(handle_unknown="ignore"))]), cat)
+    ])
+
+    pipe = Pipeline([("pre", pre), ("clf", LogisticRegression(max_iter=600))])
+    Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    pipe.fit(Xtr, ytr)
+    try:
+        auc = roc_auc_score(yte, pipe.predict_proba(Xte)[:,1])
+    except Exception:
+        auc = None
+
+    joblib.dump({"pipeline": pipe, "feature_names": X.columns.tolist()}, MODEL_PATH)
+    return {"accuracy": float(accuracy_score(yte, pipe.predict(Xte))), "roc_auc": auc}
+
+def ensure_model():
+    if MODEL_PATH.exists() and MODEL_PATH.stat().st_size > 0:
+        return
+    with st.spinner("Training model for the first time..."):
+        metrics = train_and_save()
+        st.success(f"Training complete. Accuracy={metrics['accuracy']:.3f}" + (f", AUC={metrics['roc_auc']:.3f}" if metrics['roc_auc'] is not None else ""))
+
+ensure_model()
+obj = joblib.load(MODEL_PATH)
+pipe = obj["pipeline"]
+
+with st.form("input_form"):
+    c1, c2 = st.columns(2)
+    with c1:
+        age = st.number_input("age", 1, 120, 55)
+        sex = st.selectbox("sex (1=male,0=female)", [1,0], index=0)
+        cp = st.selectbox("cp (0-3)", [0,1,2,3], index=1)
+        trestbps = st.number_input("trestbps", 60, 250, 130)
+        chol = st.number_input("chol", 100, 700, 240)
+        fbs = st.selectbox("fbs (>120)", [0,1], index=0)
+    with c2:
+        restecg = st.selectbox("restecg", [0,1], index=1)
+        thalach = st.number_input("thalach", 60, 250, 150)
+        exang = st.selectbox("exang", [0,1], index=0)
+        oldpeak = st.number_input("oldpeak", 0.0, 10.0, 1.0, step=0.1)
+        slope = st.selectbox("slope", [0,1,2], index=1)
+        ca = st.selectbox("ca (# major vessels)", [0,1,2,3,4], index=0)
+        thal = st.selectbox("thal", [0,1,2,3], index=2)
+    submitted = st.form_submit_button("Predict")
+
+if submitted:
+    row = {
+        "age": age, "sex": sex, "cp": cp, "trestbps": trestbps, "chol": chol,
+        "fbs": fbs, "restecg": restecg, "thalach": thalach, "exang": exang,
+        "oldpeak": oldpeak, "slope": slope, "ca": ca, "thal": thal
+    }
+    X = pd.DataFrame([row])
+    pred = pipe.predict(X)[0]
+    try:
+        proba = pipe.predict_proba(X)[0,1]
+    except Exception:
+        proba = None
+    st.subheader("Result")
+    st.write("**Prediction:**", "Heart disease **likely**" if pred==1 else "Heart disease **unlikely**")
+    if proba is not None:
+        st.write(f"**Probability:** {proba:.2%}")
+    st.caption("Educational use only — not medical advice.")
