@@ -12,20 +12,6 @@ BASE = Path(__file__).resolve().parents[1]
 MODEL_PATH = BASE / "models" / "final_model.pkl"
 DATA_PATH = BASE / "data" / "heart_disease.csv"
 RESULTS_PATH = BASE / "results" / "evaluation_metrics.txt"
-# put this near the top of app.py after imports and the PATH constants
-with st.sidebar:
-    if st.button("Force refresh (clear model/data/cache)"):
-        try:
-            st.cache_resource.clear()  # clear cached model, etc.
-        except Exception:
-            pass
-        for p in [MODEL_PATH, DATA_PATH, RESULTS_PATH]:
-            try:
-                if p.exists():
-                    p.unlink()
-            except Exception:
-                pass
-        st.success("Cleared! Please rerun the app.")
 
 def ensure_data():
     # 1) If local CSV exists and has rows, use it.
