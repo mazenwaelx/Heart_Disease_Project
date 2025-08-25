@@ -108,48 +108,55 @@ obj = joblib.load(MODEL_PATH)
 pipe = obj["pipeline"]
 
 with st.form("input_form"):
+    st.markdown("### إدخال البيانات / Inputs")
+
     c1, c2 = st.columns(2)
     with c1:
-        age = st.number_input("age", 1, 120, 55)
-        sex = st.selectbox("sex (1=male,0=female)", [1,0], index=0)
-        cp = st.selectbox("cp (0-3)", [0,1,2,3], index=1)
-        trestbps = st.number_input("trestbps", 60, 250, 130)
-        chol = st.number_input("chol", 100, 700, 240)
-        fbs = st.selectbox("fbs (>120)", [0,1], index=0)
+        age = st.number_input("Age (العمر)", min_value=1, max_value=120, value=55)
+        sex = st.selectbox("Sex (الجنس: 1=ذكر, 0=أنثى)", options=[1, 0], index=0)
+        cp = st.selectbox("Chest Pain Type (نوع ألم الصدر: 0-3)", options=[0, 1, 2, 3], index=1)
+        trestbps = st.number_input("Resting Blood Pressure – trestbps (ضغط الدم أثناء الراحة)", min_value=60, max_value=250, value=130)
+        chol = st.number_input("Serum Cholesterol – chol (الكوليسترول)", min_value=100, max_value=700, value=240)
+        fbs = st.selectbox("Fasting Blood Sugar – fbs (>120) (سكر صائم > 120)", options=[0, 1], index=0)
+
     with c2:
-        restecg = st.selectbox("restecg", [0,1], index=1)
-        thalach = st.number_input("thalach", 60, 250, 150)
-        exang = st.selectbox("exang", [0,1], index=0)
-        oldpeak = st.number_input("oldpeak", 0.0, 10.0, 1.0, step=0.1)
-        slope = st.selectbox("slope", [0,1,2], index=1)
-        ca = st.selectbox("ca (# major vessels)", [0,1,2,3,4], index=0)
-        thal = st.selectbox("thal", [0,1,2,3], index=2)
-    submitted = st.form_submit_button("Predict")
+        restecg = st.selectbox("Resting ECG – restecg (رسم القلب أثناء الراحة)", options=[0, 1], index=1)
+        thalach = st.number_input("Max Heart Rate – thalach (أقصى معدل ضربات القلب)", min_value=60, max_value=250, value=150)
+        exang = st.selectbox("Exercise Induced Angina – exang (ذبحة صدرية بالمجهود)", options=[0, 1], index=0)
+        oldpeak = st.number_input("ST Depression – oldpeak (انخفاض مقطع ST)", min_value=0.0, max_value=10.0, value=1.0, step=0.1)
+        slope = st.selectbox("Slope of ST Segment – slope (ميل المقطع ST)", options=[0, 1, 2], index=1)
+        ca = st.selectbox("Major Vessels – ca (عدد الأوعية الرئيسية المصبوغة)", options=[0, 1, 2, 3, 4], index=0)
+        thal = st.selectbox("Thalassemia – thal (ثلاسيميا: 0–3)", options=[0, 1, 2, 3], index=2)
+
+    submitted = st.form_submit_button("تنبؤ / Predict")
 
 if submitted:
+    # Keep original short feature names for the model input
     X = pd.DataFrame([{
-        "Age (العمر)": age,
-        "Sex (الجنس: 1=ذكر, 0=أنثى)": sex,
-        "Chest Pain Type (نوع ألم الصدر)": cp,
-        "Resting Blood Pressure - trestbps (ضغط الدم أثناء الراحة)": trestbps,
-        "Serum Cholesterol - chol (الكوليسترول)": chol,
-        "Fasting Blood Sugar - fbs (سكر صائم > 120)": fbs,
-        "Resting ECG - restecg (رسم القلب)": restecg,
-        "Max Heart Rate - thalach (أقصى معدل ضربات)": thalach,
-        "Exercise Induced Angina - exang (ذبحة صدرية بالمجهود)": exang,
-        "ST Depression - oldpeak (انخفاض مقطع ST)": oldpeak,
-        "Slope of ST Segment - slope (ميل المقطع ST)": slope,
-        "Major Vessels - ca (عدد الأوعية الرئيسية)": ca,
-        "Thalassemia - thal (ثلاسيميا)": thal
+        "age": age,
+        "sex": sex,
+        "cp": cp,
+        "trestbps": trestbps,
+        "chol": chol,
+        "fbs": fbs,
+        "restecg": restecg,
+        "thalach": thalach,
+        "exang": exang,
+        "oldpeak": oldpeak,
+        "slope": slope,
+        "ca": ca,
+        "thal": thal
     }])
+
     pred = pipe.predict(X)[0]
     try:
-        proba = pipe.predict_proba(X)[0,1]
+        proba = pipe.predict_proba(X)[0, 1]
     except Exception:
         proba = None
 
-    st.subheader("Result")
-    st.write("**Prediction:**", "Heart disease **likely**" if pred==1 else "Heart disease **unlikely**")
+    st.subheader("النتيجة / Result")
+    st.write("**Prediction / التنبؤ:**", "Heart disease **likely** | مرض القلب **مرجّح**" if pred == 1 else "Heart disease **unlikely** | مرض القلب **غير مرجّح**")
     if proba is not None:
-        st.write(f"**Probability:** {proba:.2%}")
-    st.caption("Educational use only — ليس تشخيص طبي")
+        st.write(f"**Probability / الاحتمال:** {proba:.2%}")
+    st.caption("Educational use only — ليس تشخيصًا طبيًا")
+
