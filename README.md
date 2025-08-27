@@ -1,71 +1,138 @@
-Learning Management System (LMS)
+Heart Disease Prediction Project
 
-
-
-
-
-
-A web-based Learning Management System (LMS) built using Java Spring Boot for managing online courses, assessments, and performance tracking. The system supports multiple user roles (Admin, Instructor, Student) with features like course creation, user management, quizzes, assignments, and more.
+A comprehensive machine learning pipeline for analyzing and predicting heart disease risk using the UCI Heart Disease Dataset. The project covers data preprocessing, feature selection, dimensionality reduction (PCA), supervised and unsupervised modeling, hyperparameter tuning, and deployment through a Streamlit UI.
 
 Features
-1. User Management
-Role-Based Access Control: Supports Admin, Instructor, and Student roles.
-User Registration & Login: Secure login with role-based access.
-Profile Management: Allows users to view and update their profiles.
-2. Course Management
-Course Creation: Instructors can create and manage courses with media files (videos, PDFs, etc.).
-Enrollment Management: Students can enroll in courses; Admins and Instructors can manage enrollments.
-Attendance Management: Instructors generate OTPs for lessons to track student attendance.
-3. Assessments & Grading
-Quiz Creation: Instructors create quizzes with various question types (MCQs, True/False, Short Answer).
-Assignment Submission: Students submit assignments for grading.
-Grading & Feedback: Instructors grade assignments and provide feedback to students.
-4. Performance Tracking
-Student Progress: Track student performance through quiz scores, assignment submissions, and attendance.
-5. Notifications
-System Notifications: Students and Instructors receive notifications for enrollment, grades, and course updates.
-Email Notifications: Students get email updates for course enrollments and assignment grades.
-6. Bonus Features
-Excel Report Generation: Generate performance reports for students.
-Visual Analytics: Charts to visualize student progress and course completion.
+1. Data Preprocessing & Cleaning
+
+Missing values handled via imputation.
+
+Categorical encoding with One-Hot Encoder.
+
+Feature scaling using StandardScaler/MinMaxScaler.
+
+Exploratory Data Analysis (EDA) with histograms, correlation heatmaps, and boxplots.
+
+2. Dimensionality Reduction
+
+Principal Component Analysis (PCA) applied.
+
+Cumulative variance plots to determine optimal components.
+
+3. Feature Selection
+
+Random Forest feature importance ranking.
+
+Recursive Feature Elimination (RFE).
+
+Chi-Square test for categorical features.
+
+4. Supervised Learning
+
+Trained and evaluated with multiple models:
+
+Logistic Regression
+
+Decision Tree
+
+Random Forest
+
+Support Vector Machine (SVM)
+
+Metrics include: Accuracy, Precision, Recall, F1-Score, ROC curve & AUC.
+
+5. Unsupervised Learning
+
+K-Means clustering with elbow method.
+
+Hierarchical clustering with dendrograms.
+
+6. Hyperparameter Tuning
+
+Implemented with GridSearchCV (with example for RandomizedSearchCV).
+
+Optimized model saved to .pkl.
+
+7. Deployment
+
+Streamlit UI for real-time prediction.
+
+Ngrok setup for public deployment.
+
+Results logged into results/evaluation_metrics.txt.
+
 Technical Stack
-Backend: Java Spring Boot (RESTful APIs)
-Database: MySQL (or PostgreSQL)
-Authentication: Spring Security for role-based access
-Email: JavaMailSender for email notifications
-Testing: JUnit for unit testing
-Excel Reports: Apache POI for Excel generation
-Build Tool: Maven
+
+Python 3.9+
+
+Libraries: pandas, numpy, scikit-learn, matplotlib, seaborn, streamlit, ucimlrepo, joblib, scipy
+
+Deployment: Streamlit + Ngrok
+
+Version Control: Git & GitHub
+
+File Structure
+Heart_Disease_Project/
+│── data/
+│   └── heart_disease.csv
+│── notebooks/
+│   ├── 01_data_preprocessing.ipynb
+│   ├── 02_pca_analysis.ipynb
+│   ├── 03_feature_selection.ipynb
+│   ├── 04_supervised_learning.ipynb
+│   ├── 05_unsupervised_learning.ipynb
+│   └── 06_hyperparameter_tuning.ipynb
+│── models/
+│   └── final_model.pkl
+│── ui/
+│   └── app.py
+│── deployment/
+│   └── ngrok_setup.txt
+│── results/
+│   └── evaluation_metrics.txt
+│── README.md
+│── requirements.txt
+└── .gitignore
+
 Getting Started
 Prerequisites
-Java 17 or later
-MySQL or PostgreSQL database
-Maven for project management
-IDE (e.g., IntelliJ IDEA, Eclipse)
+
+Python 3.9+
+
+pip / virtualenv
+
 Installation
-Clone the repository:
-
-bash
-Copy code
+# clone the repo
 git clone https://github.com/mazenwaelx/Heart_Disease_Project.git
-Navigate to the project directory:
 
-bash
-Copy code
+# move into project directory
 cd Heart_Disease_Project
-Set up the database and configure application.properties with your database credentials.
 
-Build and run the application:
+# create environment & install dependencies
+python -m venv venv
+source venv/bin/activate   # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
 
-bash
-Copy code
-mvn spring-boot:run
-Access the application at http://localhost:8080.
-or by the link https://mazenwaelx-heart-disease-project-uiapp-3zbliz.streamlit.app/
+Run the app
+cd ui
+streamlit run app.py
+
+
+The UI will launch locally at http://localhost:8501
+.
+
 Contributing
+
 Fork the repository.
+
 Create a new branch (git checkout -b feature-branch).
-Commit your changes (git commit -am 'Add new feature').
-Push to the branch (git push origin feature-branch).
-Create a new Pull Request.
+
+Commit your changes (git commit -am 'Add feature').
+
+Push to branch (git push origin feature-branch).
+
+Open a Pull Request.
+
 License
+
+This project is for educational and research purposes. Not intended for clinical use.
