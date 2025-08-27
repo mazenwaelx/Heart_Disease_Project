@@ -121,6 +121,8 @@ streamlit run app.py
 The UI will launch locally at http://localhost:8501
 .
 
+or by the link https://mazenwaelx-heart-disease-project-uiapp-3zbliz.streamlit.app/
+
 Contributing
 
 Fork the repository.
